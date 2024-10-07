@@ -45,7 +45,6 @@ struct Array {
 };
 
 // объявление структуры List
-/*
 struct List {
     Node* head;
     Node* tail;
@@ -60,7 +59,6 @@ struct List {
     bool search(string value);
     void display();
 };
-*/
 
 // объявление структуры DubleList
 // объявление структуры HashTable

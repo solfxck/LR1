@@ -2,7 +2,7 @@
 #include "node.h"
 
 // Реализация метода добавления элемента в стек
-void Stack::push(std::string value) {
+void Stack::push(string value) {
     Node* node = new Node{ value, top }; // Устанавливаем новый узел поверх стека
     top = node;
 }

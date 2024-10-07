@@ -1,7 +1,7 @@
 #include "header.h"
 #include "node.h"
 
-void Queue::push(std::string value) {
+void Queue::push(string value) {
     Node* node = new Node{ value, nullptr };
     if (head == nullptr) {
         head = node;

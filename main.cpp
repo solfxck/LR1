@@ -7,12 +7,12 @@
 using namespace std;
 
 int main() {
-    system("chcp 1251");
     setlocale(LC_ALL, "Russian");
 
     Queue queue;
     Stack stack;
     Array array;
+    List list;
     string command, value;
 
     // загрузка очереди из файла
@@ -51,6 +51,15 @@ int main() {
         inputFile.close();
     }
 
+    // Загрузка списка из файла
+    inputFile.open("list.txt");
+    if (inputFile.is_open()) {
+        while (getline(inputFile, value)) {
+            list.pushTail(value);
+        }
+        inputFile.close();
+    }
+
     while (true) {
         cout << "> ";
         cin >> command;
@@ -58,7 +67,7 @@ int main() {
         if (command == "EXIT") {
             break;
         }
-        
+
         // Queue (ОЧЕРЕДЬ)
         else if (command.at(0) == 'Q') { // команды для очереди
             if (command == "QPUSH") {
@@ -131,7 +140,41 @@ int main() {
         }
 
         // List (ОДНОСВЗЯНЫЙ СПИСОК)
-
+        else if (command.at(0) == 'L') { // Команды для списка
+            if (command == "LPUSHHEAD") { // Добавление в начало
+                cin >> value;
+                list.pushHead(value);
+            }
+            else if (command == "LPUSHTAIL") { // Добавление в конец
+                cin >> value;
+                list.pushTail(value);
+            }
+            else if (command == "LPOPHEAD") { // Удаление с начала
+                list.popHead();
+            }
+            else if (command == "LPOPTAIL") { // Удаление с конца
+                list.popTail();
+            }
+            else if (command == "LPOPVALUE") { // Удаление по значению
+                cin >> value;
+                list.popValue(value);
+            }
+            else if (command == "LSEARCH") { // Поиск по значению
+                cin >> value;
+                if (list.search(value)) {
+                    cout << "Элемент найден" << endl;
+                }
+                else {
+                    cout << "Элемент не найден" << endl;
+                }
+            }
+            else if (command == "LPRINT") { // Вывод списка
+                list.display();
+            }
+            else {
+                cout << "Неверная команда." << endl;
+            }
+        }
 
         // DubleList (ДВУСВЯЗНЫЙ СПИСОК)
         // HashTable (ХЕШ-ТАБЛИЦА)
@@ -169,6 +212,17 @@ int main() {
     if (outputFile.is_open()) {
         for (int i = 0; i < array.length(); i++) {
             outputFile << array.get(i) << endl;
+        }
+        outputFile.close();
+    }
+
+    // Сохранение списка в файл
+    outputFile.open("list.txt");
+    if (outputFile.is_open()) {
+        Node* current = list.head;
+        while (current != nullptr) {
+            outputFile << current->data << endl;
+            current = current->next;
         }
         outputFile.close();
     }
