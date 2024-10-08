@@ -12,3 +12,11 @@ struct Node {
         : data(value), next(nextNode), prev(prevNode) {
     }
 };
+
+struct NodeHT {
+    string key;
+    string value;
+    NodeHT* next;
+
+    NodeHT(string key, string value) : key(key), value(value), next(nullptr) {}
+};

@@ -13,7 +13,9 @@ int main() {
     Stack stack;
     Array array;
     List list;
-    string command, value;
+    DubleList dubleList;
+    HashTable hashTable(1);
+    string command, key, value;
 
     // загрузка очереди из файла
     ifstream inputFile("queue.txt");
@@ -56,6 +58,25 @@ int main() {
     if (inputFile.is_open()) {
         while (getline(inputFile, value)) {
             list.pushTail(value);
+        }
+        inputFile.close();
+    }
+
+    // загрузка двусвязного списка из файла
+    inputFile.open("dublelist.txt");
+    if (inputFile.is_open()) {
+        while (getline(inputFile, value)) {
+            dubleList.pushTail(value);
+        }
+        inputFile.close();
+    }
+
+    // загрузка хеш-таблицы из файла
+    inputFile.open("hashtable.txt");
+    if (inputFile.is_open()) {
+        while (getline(inputFile, key)) {
+            getline(inputFile, value);
+            hashTable.put(key, value);
         }
         inputFile.close();
     }
@@ -177,7 +198,65 @@ int main() {
         }
 
         // DubleList (ДВУСВЯЗНЫЙ СПИСОК)
+        else if (command.at(0) == 'D') { // Команды для двусвязного списка
+            if (command == "DPUSH_H") { // Добавление в начало
+                cin >> value;
+                dubleList.pushHead(value);
+            }
+            else if (command == "DPUSH_T") { // Добавление в конец
+                cin >> value;
+                dubleList.pushTail(value);
+            }
+            else if (command == "DPOP_H") { // Удаление с начала
+                dubleList.popHead();
+            }
+            else if (command == "DPOP_T") { // Удаление с конца
+                dubleList.popTail();
+            }
+            else if (command == "DPOP_V") { // Удаление по значению
+                cin >> value;
+                dubleList.popValue(value);
+            }
+            else if (command == "DSEARCH") { // Поиск по значению
+                cin >> value;
+                if (dubleList.search(value)) {
+                    cout << "Элемент найден" << endl;
+                }
+                else {
+                    cout << "Элемент не найден" << endl;
+                }
+            }
+            else if (command == "DPRINT") { // Вывод списка
+                dubleList.display();
+            }
+            else {
+                cout << "Неверная команда." << endl;
+            }
+        }
+
         // HashTable (ХЕШ-ТАБЛИЦА)
+        else if (command.at(0) == 'H') { // Команды для хеш-таблицы
+            if (command == "HPUT") { // Добавление элемента
+                cin >> key >> value;
+                hashTable.put(key, value);
+            }
+            else if (command == "HGET") { // Получение значения по ключу
+                cin >> key;
+                cout << hashTable.get(key) << endl;
+            }
+            else if (command == "HREM") { // Удаление элемента по ключу
+                cin >> key;
+                if (hashTable.remove(key)) {
+                    cout << " удален" << endl;
+                }
+                else {
+                    cout << "Элемент не найден" << endl;
+                }
+            }
+            else {
+                cout << "Неверная команда." << endl;
+            }
+        }
         // AVL (АВЛ-ДЕРЕВО)
 
         else {
@@ -223,6 +302,31 @@ int main() {
         while (current != nullptr) {
             outputFile << current->data << endl;
             current = current->next;
+        }
+        outputFile.close();
+    }
+
+    // cохранение двусвязного списка в файл
+    outputFile.open("dublelist.txt");
+    if (outputFile.is_open()) {
+        Node* current = dubleList.head;
+        while (current != nullptr) {
+            outputFile << current->data << endl;
+            current = current->next;
+        }
+        outputFile.close();
+    }
+
+    // Сохранение хеш-таблицы в файл
+    outputFile.open("hashtable.txt");
+    if (outputFile.is_open()) {
+        for (int i = 0; i < hashTable.size; ++i) {
+            NodeHT* current = hashTable.table[i];
+            while (current != nullptr) {
+                outputFile << current->key << endl;
+                outputFile << current->value << endl;
+                current = current->next;
+            }
         }
         outputFile.close();
     }

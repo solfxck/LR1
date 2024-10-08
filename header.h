@@ -61,5 +61,31 @@ struct List {
 };
 
 // объявление структуры DubleList
+struct DubleList {
+    Node* head;
+    Node* tail;
+    int size;
+
+    DubleList();
+    void pushHead(string value);
+    void pushTail(string value);
+    void popHead();
+    void popTail();
+    bool popValue(string value);
+    bool search(string value);
+    void display();
+};
+
 // объявление структуры HashTable
+struct HashTable {
+    NodeHT** table;
+    int size;
+
+    HashTable(int size = 1);
+    void put(string key, string value);
+    string get(string key);
+    bool remove(string key);
+    int hashFunction(string key);
+};
+
 // объявление структуры AVL
