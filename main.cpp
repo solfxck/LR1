@@ -296,7 +296,7 @@ int main() {
         }
 
         // AVL (АВЛ-ДЕРЕВО)
-        else if (command.at(0) == 'T') { // Команды для АВЛ-дерева
+        else if (command.at(0) == 'T') {
             if (command == "TPUSH") { // Вставка элемента
                 cin >> intValue;
                 avlTree.insert(intValue);
