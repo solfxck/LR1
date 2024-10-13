@@ -20,3 +20,12 @@ struct NodeHT {
 
     NodeHT(string key, string value) : key(key), value(value), next(nullptr) {}
 };
+
+struct NodeAVL {
+    int key;
+    NodeAVL* left;
+    NodeAVL* right;
+    int height;
+
+    NodeAVL(int key) : key(key), left(nullptr), right(nullptr), height(1) {}
+};

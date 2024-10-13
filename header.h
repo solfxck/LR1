@@ -89,3 +89,21 @@ struct HashTable {
 };
 
 // объявление структуры AVL
+struct AVL {
+    NodeAVL* root;
+
+    AVL() : root(nullptr) {}
+    int height(NodeAVL* node);
+    int balanceFactor(NodeAVL* node);
+    NodeAVL* rightRotate(NodeAVL* y);
+    NodeAVL* leftRotate(NodeAVL* x);
+    NodeAVL* insert(NodeAVL* node, int key);
+    NodeAVL* minValueNode(NodeAVL* node);
+    NodeAVL* deleteNode(NodeAVL* root, int key);
+    NodeAVL* search(NodeAVL* node, int key);
+    void inOrder(NodeAVL* node);
+    void insert(int key);
+    void remove(int key);
+    bool search(int key);
+    void display();
+};

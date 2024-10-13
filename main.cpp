@@ -3,8 +3,40 @@
 #include <string>
 #include "header.h"
 #include "node.h"
+#include <queue>
 
 using namespace std;
+
+// Загрузка АВЛ-дерева из файла
+void loadAvlTree(AVL& avlTree, const string& filename) {
+    ifstream inputFile(filename);
+    if (inputFile.is_open()) {
+        int key;
+        while (inputFile >> key) {
+            avlTree.insert(key);
+        }
+        inputFile.close();
+    }
+}
+
+// Сохранение АВЛ-дерева в файл
+void saveAvlTree(const AVL& avlTree, const string& filename) {
+    ofstream outputFile(filename);
+    if (outputFile.is_open()) {
+        queue<NodeAVL*> q;
+        q.push(avlTree.root);
+        while (!q.empty()) {
+            NodeAVL* current = q.front();
+            q.pop();
+            if (current != nullptr) {
+                outputFile << current->key << " ";
+                q.push(current->left);
+                q.push(current->right);
+            }
+        }
+        outputFile.close();
+    }
+}
 
 int main() {
     setlocale(LC_ALL, "Russian");
@@ -15,7 +47,9 @@ int main() {
     List list;
     DubleList dubleList;
     HashTable hashTable(1);
+    AVL avlTree;
     string command, key, value;
+    int intValue;
 
     // загрузка очереди из файла
     ifstream inputFile("queue.txt");
@@ -80,6 +114,9 @@ int main() {
         }
         inputFile.close();
     }
+
+    // Загрузка AVL-дерева из файла
+    loadAvlTree(avlTree, "avltree.txt");
 
     while (true) {
         cout << "> ";
@@ -257,7 +294,33 @@ int main() {
                 cout << "Неверная команда." << endl;
             }
         }
+
         // AVL (АВЛ-ДЕРЕВО)
+        else if (command.at(0) == 'T') { // Команды для АВЛ-дерева
+            if (command == "TPUSH") { // Вставка элемента
+                cin >> intValue;
+                avlTree.insert(intValue);
+            }
+            else if (command == "TPOP") { // Удаление элемента
+                cin >> intValue;
+                avlTree.remove(intValue);
+            }
+            else if (command == "TSEARCH") { // Поиск элемента
+                cin >> intValue;
+                if (avlTree.search(intValue)) {
+                    cout << "Элемент найден" << endl;
+                }
+                else {
+                    cout << "Элемент не найден" << endl;
+                }
+            }
+            else if (command == "TPRINT") { // Вывод дерева
+                avlTree.display();
+            }
+            else {
+                cout << "Неверная команда." << endl;
+            }
+        }
 
         else {
             cout << "Неверная команда." << endl;
@@ -330,6 +393,9 @@ int main() {
         }
         outputFile.close();
     }
+
+    // Сохранение AVL-дерева в файл
+    saveAvlTree(avlTree, "avltree.txt");
 
     return 0;
 }
