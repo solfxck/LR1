@@ -52,7 +52,7 @@ int main() {
     int intValue;
 
     // загрузка очереди из файла
-    ifstream inputFile("queue.txt");
+    ifstream inputFile("txt/queue.txt");
     if (inputFile.is_open()) {
         while (getline(inputFile, value)) {
             queue.push(value);
@@ -61,7 +61,7 @@ int main() {
     }
 
     // загрузка стека из файла
-    inputFile.open("stack.txt");
+    inputFile.open("txt/stack.txt");
     if (inputFile.is_open()) {
         string values[100]; // для хранения элементов
         int count = 0;
@@ -79,7 +79,7 @@ int main() {
     }
 
     // загрузка массива из файла
-    inputFile.open("array.txt");
+    inputFile.open("txt/array.txt");
     if (inputFile.is_open()) {
         while (getline(inputFile, value)) {
             array.pushEnd(value);
@@ -88,7 +88,7 @@ int main() {
     }
 
     // Загрузка списка из файла
-    inputFile.open("list.txt");
+    inputFile.open("txt/list.txt");
     if (inputFile.is_open()) {
         while (getline(inputFile, value)) {
             list.pushTail(value);
@@ -97,7 +97,7 @@ int main() {
     }
 
     // загрузка двусвязного списка из файла
-    inputFile.open("dublelist.txt");
+    inputFile.open("txt/dublelist.txt");
     if (inputFile.is_open()) {
         while (getline(inputFile, value)) {
             dubleList.pushTail(value);
@@ -106,7 +106,7 @@ int main() {
     }
 
     // загрузка хеш-таблицы из файла
-    inputFile.open("hashtable.txt");
+    inputFile.open("txt/hashtable.txt");
     if (inputFile.is_open()) {
         while (getline(inputFile, key)) {
             getline(inputFile, value);
@@ -116,7 +116,7 @@ int main() {
     }
 
     // Загрузка AVL-дерева из файла
-    loadAvlTree(avlTree, "avltree.txt");
+    loadAvlTree(avlTree, "txt/avltree.txt");
 
     while (true) {
         cout << "> ";
@@ -162,11 +162,11 @@ int main() {
 
         // Array (МАССИВ)
         else if (command.at(0) == 'M') { // команды для массива
-            if (command == "MPUSH") { // добавление в конец
+            if (command == "MPUSH_T") { // добавление в конец
                 cin >> value;
                 array.pushEnd(value);
             }
-            else if (command == "MPUSHID") { // добавление по индексу
+            else if (command == "MPUSH_ID") { // добавление по индексу
                 int index;
                 cin >> index >> value;
                 array.push(index, value);
@@ -176,7 +176,7 @@ int main() {
                 cin >> index;
                 cout << array.get(index) << endl;
             }
-            else if (command == "MPOPID") { // удаление по индексу
+            else if (command == "MPOP_ID") { // удаление по индексу
                 int index;
                 cin >> index;
                 array.pop(index);
@@ -199,21 +199,21 @@ int main() {
 
         // List (ОДНОСВЗЯНЫЙ СПИСОК)
         else if (command.at(0) == 'L') { // Команды для списка
-            if (command == "LPUSHHEAD") { // Добавление в начало
+            if (command == "LPUSH_H") { // Добавление в начало
                 cin >> value;
                 list.pushHead(value);
             }
-            else if (command == "LPUSHTAIL") { // Добавление в конец
+            else if (command == "LPUSH_T") { // Добавление в конец
                 cin >> value;
                 list.pushTail(value);
             }
-            else if (command == "LPOPHEAD") { // Удаление с начала
+            else if (command == "LPOP_H") { // Удаление с начала
                 list.popHead();
             }
-            else if (command == "LPOPTAIL") { // Удаление с конца
+            else if (command == "LPOP_T") { // Удаление с конца
                 list.popTail();
             }
-            else if (command == "LPOPVALUE") { // Удаление по значению
+            else if (command == "LPOP_V") { // Удаление по значению
                 cin >> value;
                 list.popValue(value);
             }
@@ -273,7 +273,7 @@ int main() {
 
         // HashTable (ХЕШ-ТАБЛИЦА)
         else if (command.at(0) == 'H') { // Команды для хеш-таблицы
-            if (command == "HPUT") { // Добавление элемента
+            if (command == "HPUSH") { // Добавление элемента
                 cin >> key >> value;
                 hashTable.put(key, value);
             }
@@ -281,7 +281,7 @@ int main() {
                 cin >> key;
                 cout << hashTable.get(key) << endl;
             }
-            else if (command == "HREM") { // Удаление элемента по ключу
+            else if (command == "HPOP") { // Удаление элемента по ключу
                 cin >> key;
                 if (hashTable.remove(key)) {
                     cout << " удален" << endl;
@@ -328,7 +328,7 @@ int main() {
     }
 
     // сохранение очереди в файл
-    ofstream outputFile("queue.txt");
+    ofstream outputFile("txt/queue.txt");
     if (outputFile.is_open()) {
         Node* current = queue.head;
         while (current != nullptr) {
@@ -339,7 +339,7 @@ int main() {
     }
 
     // сохранение стека в файл
-    outputFile.open("stack.txt");
+    outputFile.open("txt/stack.txt");
     if (outputFile.is_open()) {
         Node* current = stack.top;
         while (current != nullptr) {
@@ -350,7 +350,7 @@ int main() {
     }
 
     // сохранение массива в файл
-    outputFile.open("array.txt");
+    outputFile.open("txt/array.txt");
     if (outputFile.is_open()) {
         for (int i = 0; i < array.length(); i++) {
             outputFile << array.get(i) << endl;
@@ -359,7 +359,7 @@ int main() {
     }
 
     // Сохранение списка в файл
-    outputFile.open("list.txt");
+    outputFile.open("txt/list.txt");
     if (outputFile.is_open()) {
         Node* current = list.head;
         while (current != nullptr) {
@@ -370,7 +370,7 @@ int main() {
     }
 
     // cохранение двусвязного списка в файл
-    outputFile.open("dublelist.txt");
+    outputFile.open("txt/dublelist.txt");
     if (outputFile.is_open()) {
         Node* current = dubleList.head;
         while (current != nullptr) {
@@ -381,7 +381,7 @@ int main() {
     }
 
     // Сохранение хеш-таблицы в файл
-    outputFile.open("hashtable.txt");
+    outputFile.open("txt/hashtable.txt");
     if (outputFile.is_open()) {
         for (int i = 0; i < hashTable.size; ++i) {
             NodeHT* current = hashTable.table[i];
@@ -395,7 +395,7 @@ int main() {
     }
 
     // Сохранение AVL-дерева в файл
-    saveAvlTree(avlTree, "avltree.txt");
+    saveAvlTree(avlTree, "txt/avltree.txt");
 
     return 0;
 }
