@@ -1,8 +1,44 @@
 #include <iostream>
-#include "node.h"
 #pragma once
 
 using namespace std;
+
+struct Node {
+    string data; // данные, хранящиеся в узле
+    Node* next;  // указатель на следующий узел в списке
+    Node* prev;  // указатель на предыдущий узел в списке
+
+    // конструктор для создания нового узла
+    // принимает значение данных, указатель на следующий узел и указатель на предыдущий узел
+    Node(const string& value, Node* nextNode = nullptr, Node* prevNode = nullptr)
+        : data(value), next(nextNode), prev(prevNode) {
+    }
+};
+
+// Node для хеш-таблицы
+struct NodeHT {
+    string key;   // ключ
+    string value; // Значение, связанное с ключом
+    NodeHT* next; // указатель на следующий узел в цепочке (для разрешения коллизий)
+
+    // конструктор для создания нового узла хеш-таблицы
+    // принимает ключ, значение и указатель на следующий узел в цепочке
+    NodeHT(const string& k, const string& v, NodeHT* nextNode = nullptr)
+        : key(k), value(v), next(nextNode) {
+    }
+};
+
+// Node для АВЛ-дерева
+struct NodeAVL {
+    int key; // ключ
+    NodeAVL* left; // указатель на левое поддерево
+    NodeAVL* right; // указатель на правое поддерево
+    int height; // высота поддерева с корнем в данном узле
+
+    // конструктор для создания нового узла АВЛ-дерева
+    // принимает ключ и инициализирует указатели на левое и правое поддеревья, а также высоту
+    NodeAVL(int key) : key(key), left(nullptr), right(nullptr), height(1) {}
+};
 
 // объявление структуры Queue
 struct Queue {
@@ -78,14 +114,16 @@ struct DubleList {
 
 // объявление структуры HashTable
 struct HashTable {
-    NodeHT** table;
-    int size;
+    static const int size = 10; // Размер хеш-таблицы
+    NodeHT* table[size]; // Массив указателей на Node
 
-    HashTable(int size = 1);
-    void put(string key, string value);
-    string get(string key);
-    bool remove(string key);
-    int hashFunction(string key);
+    HashTable();
+    int hashFunction(const string& key);
+    int hashFunction2(const string& key);
+    void insert(const string& key, const string& value);
+    string get(const string& key);
+    void remove(const string& key);
+    void display();
 };
 
 // объявление структуры AVL
@@ -101,7 +139,8 @@ struct AVL {
     NodeAVL* minValueNode(NodeAVL* node);
     NodeAVL* deleteNode(NodeAVL* root, int key);
     NodeAVL* search(NodeAVL* node, int key);
-    void inOrder(NodeAVL* node);
+    void preOrder(NodeAVL* node);
+    void saveToFile(NodeAVL* node, ofstream& outputFile);
     void insert(int key);
     void remove(int key);
     bool search(int key);
