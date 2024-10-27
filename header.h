@@ -3,20 +3,26 @@
 
 using namespace std;
 
+// структура Node представляет узел в двусвязном списке
 struct Node {
-    string data;
-    Node* next;
-    Node* prev;
+    string data; // данные, хранящиеся в узле
+    Node* next; // указатель на следующий узел в списке
+    Node* prev; // указатель на предыдущий узел в списке
+
+    // конструктор для создания нового узла
+    // принимает значение, указатель на следующий узел и указатель на предыдущий узел
     Node(const string& value, Node* nextNode = nullptr, Node* prevNode = nullptr)
         : data(value), next(nextNode), prev(prevNode) {}
 };
 
-// Node для хеш-таблицы
+// структура NodeHT представляет узел в хеш-таблице
 struct NodeHT {
-    string key;
-    string value;
-    NodeHT* next;
+    string key; // ключ, по которому хранится значение
+    string value; // значение, связанное с ключом
+    NodeHT* next; // указатель на следующий узел в связанном списке (для решения коллизий)
 
+    // конструктор для создания нового узла хеш-таблицы
+    // принимает ключ и значение
     NodeHT(const string& k, const string& v) : key(k), value(v), next(nullptr) {}
 };
 
@@ -106,9 +112,9 @@ struct DubleList {
 
 // объявление структуры HashTable
 struct HashTable {
-    NodeHT** table;
-    int size;
-    int count;
+    NodeHT** table; // массив указателей на узлы хеш-таблицы
+    int size; // размер хеш-таблицы
+    int count; // количество элементов в хеш-таблице
 
     HashTable(int initialSize = 10);
     int hash_function(const string& str);
