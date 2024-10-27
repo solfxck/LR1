@@ -5,166 +5,184 @@
 
 using namespace std;
 
+// ------------- ЗАГРУЗКА из файла -------------
+
+// функция для загрузки данных в очередь из файла
 void loadQueueFromFile(Queue& queue, const string& filename) {
-    ifstream inputFile(filename);
-    if (inputFile.is_open()) {
+    ifstream inputFile(filename); // открываем файл для чтения
+    if (inputFile.is_open()) { // проверяем, удалось ли открыть файл
         string value;
-        while (getline(inputFile, value)) {
-            queue.push(value);
+        while (getline(inputFile, value)) { // читаем строки из файла
+            queue.push(value); // добавляем строку в очередь
         }
-        inputFile.close();
+        inputFile.close(); // закрываем файл
     }
 }
 
+// функция для загрузки данных в стек из файла
 void loadStackFromFile(Stack& stack, const string& filename) {
     ifstream inputFile(filename);
     if (inputFile.is_open()) {
-        string values[100];
+        string values[100]; // для хранения строк
         int count = 0;
         string value;
         while (getline(inputFile, value)) {
-            values[count] = value;
+            values[count] = value; // сохраняем строку в массив
             count++;
         }
         inputFile.close();
 
-        for (int i = count - 1; i >= 0; i--) {
+        for (int i = count - 1; i >= 0; i--) { // добавляем строки в стек в обратном порядке
             stack.push(values[i]);
         }
     }
 }
 
+// функция для загрузки данных в массив из файла
 void loadArrayFromFile(Array& array, const string& filename) {
     ifstream inputFile(filename);
     if (inputFile.is_open()) {
         string value;
         while (getline(inputFile, value)) {
-            array.pushEnd(value);
+            array.pushEnd(value); // добавляем строку в конец массива
         }
         inputFile.close();
     }
 }
 
+// функция для загрузки данных в список из файла
 void loadListFromFile(List& list, const string& filename) {
     ifstream inputFile(filename);
     if (inputFile.is_open()) {
         string value;
         while (getline(inputFile, value)) {
-            list.pushTail(value);
+            list.pushTail(value); // добавляем строку в конец списка
         }
         inputFile.close();
     }
 }
 
+// функция для загрузки данных в двусвязный список из файла
 void loadDubleListFromFile(DubleList& dubleList, const string& filename) {
     ifstream inputFile(filename);
     if (inputFile.is_open()) {
         string value;
         while (getline(inputFile, value)) {
-            dubleList.pushTail(value);
+            dubleList.pushTail(value); // добавляем строку в конец двусвязного списка
         }
         inputFile.close();
     }
 }
 
+// функция для загрузки данных в хеш-таблицу из файла
 void loadHashTableFromFile(HashTable& hashTable, const string& filename) {
     ifstream inputFile(filename);
     if (inputFile.is_open()) {
         string key, value;
-        while (inputFile >> key >> value) {
-            hashTable.insert(key, value);
+        while (inputFile >> key >> value) { // читаем пары ключ-значение из файла
+            hashTable.insert(key, value); // добавляем пару в хеш-таблицу
         }
         inputFile.close();
     }
 }
 
+// функция для загрузки данных в АВЛ-дерево из файла
 void loadAVLFromFile(AVL& avl, const string& filename) {
     ifstream inputFile(filename);
     if (inputFile.is_open()) {
         int key;
-        while (inputFile >> key) {
-            avl.insert(key);
+        while (inputFile >> key) { // читаем ключи из файла
+            avl.insert(key); // добавляем ключ в АВЛ-дерево
         }
         inputFile.close();
     }
 }
 
+// ------------- СОХРАНЕНИЕ в файл -------------
+
+// функция для сохранения данных из очереди в файл
 void saveQueueToFile(Queue& queue, const string& filename) {
-    ofstream outputFile(filename);
-    if (outputFile.is_open()) {
+    ofstream outputFile(filename); // открываем файл для записи
+    if (outputFile.is_open()) { // проверяем, удалось ли открыть файл
         Node* current = queue.head;
-        while (current != nullptr) {
-            outputFile << current->data << endl;
+        while (current != nullptr) { // проходим по очереди
+            outputFile << current->data << endl; // записываем данные в файл
             current = current->next;
         }
-        outputFile.close();
+        outputFile.close(); // закрываем файл
     }
 }
 
+// функция для сохранения данных из стека в файл
 void saveStackToFile(Stack& stack, const string& filename) {
     ofstream outputFile(filename);
     if (outputFile.is_open()) {
         Node* current = stack.top;
-        while (current != nullptr) {
-            outputFile << current->data << endl;
+        while (current != nullptr) { // проходим по стеку
+            outputFile << current->data << endl; // записываем данные в файл
             current = current->next;
         }
-        outputFile.close();
+        outputFile.close(); // закрываем файл
     }
 }
 
+// функция для сохранения данных из массива в файл
 void saveArrayToFile(Array& array, const string& filename) {
     ofstream outputFile(filename);
     if (outputFile.is_open()) {
-        for (int i = 0; i < array.length(); i++) {
-            outputFile << array.get(i) << endl;
+        for (int i = 0; i < array.length(); i++) { // проходим по массиву
+            outputFile << array.get(i) << endl; // записываем данные в файл
         }
-        outputFile.close();
+        outputFile.close(); // закрываем файл
     }
 }
 
+// функция для сохранения данных из списка в файл
 void saveListToFile(List& list, const string& filename) {
     ofstream outputFile(filename);
     if (outputFile.is_open()) {
         Node* current = list.head;
-        while (current != nullptr) {
-            outputFile << current->data << endl;
+        while (current != nullptr) { // проходим по списку
+            outputFile << current->data << endl; // записываем данные в файл
             current = current->next;
         }
-        outputFile.close();
+        outputFile.close(); // закрываем файл
     }
 }
 
+// функция для сохранения данных из двусвязного списка в файл
 void saveDubleListToFile(DubleList& dubleList, const string& filename) {
     ofstream outputFile(filename);
     if (outputFile.is_open()) {
         Node* current = dubleList.head;
-        while (current != nullptr) {
-            outputFile << current->data << endl;
+        while (current != nullptr) { // проходим по двусвязному списку
+            outputFile << current->data << endl; // записываем данные в файл
             current = current->next;
         }
-        outputFile.close();
+        outputFile.close(); // закрываем файл
     }
 }
 
+// функция для сохранения данных из хеш-таблицы в файл
 void saveHashTableToFile(HashTable& hashTable, const string& filename) {
     ofstream outputFile(filename);
     if (outputFile.is_open()) {
-        for (int i = 0; i < hashTable.size; i++) {
+        for (int i = 0; i < hashTable.size; i++) { // проходим по хеш-таблице
             NodeHT* current = hashTable.table[i];
-            while (current != nullptr) {
-                outputFile << current->key << " " << current->value << endl;
+            while (current != nullptr) { // проходим по связанному списку
+                outputFile << current->key << " " << current->value << endl; // записываем данные в файл
                 current = current->next;
             }
         }
-        outputFile.close();
+        outputFile.close(); // закрываем файл
     }
 }
 
+// функция для сохранения данных из АВЛ-дерева в файл
 void saveAVLToFile(AVL& avl, const string& filename) {
     ofstream outputFile(filename);
     if (outputFile.is_open()) {
-        avl.saveToFile(avl.root, outputFile);
+        avl.saveToFile(avl.root, outputFile); // записываем данные в файл
         outputFile.close();
     }
 }

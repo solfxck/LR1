@@ -4,28 +4,20 @@
 using namespace std;
 
 struct Node {
-    string data; // данные, хранящиеся в узле
-    Node* next;  // указатель на следующий узел в списке
-    Node* prev;  // указатель на предыдущий узел в списке
-
-    // конструктор для создания нового узла
-    // принимает значение данных, указатель на следующий узел и указатель на предыдущий узел
+    string data;
+    Node* next;
+    Node* prev;
     Node(const string& value, Node* nextNode = nullptr, Node* prevNode = nullptr)
-        : data(value), next(nextNode), prev(prevNode) {
-    }
+        : data(value), next(nextNode), prev(prevNode) {}
 };
 
 // Node для хеш-таблицы
 struct NodeHT {
-    string key;   // ключ
-    string value; // Значение, связанное с ключом
-    NodeHT* next; // указатель на следующий узел в цепочке (для разрешения коллизий)
+    string key;
+    string value;
+    NodeHT* next;
 
-    // конструктор для создания нового узла хеш-таблицы
-    // принимает ключ, значение и указатель на следующий узел в цепочке
-    NodeHT(const string& k, const string& v, NodeHT* nextNode = nullptr)
-        : key(k), value(v), next(nextNode) {
-    }
+    NodeHT(const string& k, const string& v) : key(k), value(v), next(nullptr) {}
 };
 
 // Node для АВЛ-дерева
@@ -114,12 +106,12 @@ struct DubleList {
 
 // объявление структуры HashTable
 struct HashTable {
-    static const int size = 10; // Размер хеш-таблицы
-    NodeHT* table[size]; // Массив указателей на Node
+    NodeHT** table;
+    int size;
+    int count;
 
-    HashTable();
-    int hashFunction(const string& key);
-    int hashFunction2(const string& key);
+    HashTable(int initialSize = 10);
+    int hash_function(const string& str);
     void insert(const string& key, const string& value);
     string get(const string& key);
     void remove(const string& key);

@@ -1,94 +1,97 @@
 #include "header.h"
 #include <iostream>
-#include <string>
+#include <cstring>
 
 using namespace std;
 
-// конструктор хеш-таблицы
-HashTable::HashTable() {
+// конструктор класса HashTable
+HashTable::HashTable(int initialSize) {
+    size = initialSize;  // инициализация размера таблицы
+    count = 0;  // инициализация счетчика элементов
+    table = new NodeHT*[size];  // выделение памяти под массив указателей на узлы
     for (int i = 0; i < size; i++) {
-        table[i] = nullptr;  // каждая ячейка становится пустой
+        table[i] = nullptr;  // инициализация каждого указателя как nullptr
     }
 }
 
-// функция для вычисления основного хеш-значения
-int HashTable::hashFunction(const string& key) {
-    int hash = 0;
-    for (size_t i = 0; i < key.length(); i++) {
-        hash += key[i];  // добавляем ASCII код символа к хешу
+// функция для вычисления хеш-значения
+int HashTable::hash_function(const string& str) {
+    int hash = 0;  // инициализация хеш-значения
+    for (char c : str) {
+        hash += c;  // суммирование ASCII-кодов символов строки
     }
-    return hash % size;  // возвращаем остаток от деления на размер таблицы (для распределения значений по индексам)
+    return hash % size;  // возврат хеш-значения по модулю размера таблицы
 }
 
-// двойного хеширования (чтобы избежать коллизий)
-int HashTable::hashFunction2(const string& key) {
-    int hash = 0;
-    for (size_t i = 0; i < key.length(); i++) {
-        hash += key[i];  // добавляем ASCII код символа к хешу
-    }
-    return 7 - (hash % 7);  // возврат простого числа для уменьшения коллизий (7 - простое и меньше размера таблицы)
-}
-
-// Сложность: O(n) (в худшем случае)
+// Сложность: O(1) (в худшем (если возникают коллизии) - O(n) (n - количество элементов в связанном списке))
 void HashTable::insert(const string& key, const string& value) {
-    int index = hashFunction(key);  // вычисляем первый хеш
-    int step = hashFunction2(key);  // вычисляем шаг для двойного хеширования
+    int index = hash_function(key);  // вычисление индекса для вставки
+    NodeHT* current = table[index];  // получение текущего узла по индексу
 
-    // цикл пытается найти подходящее место для вставки элемента
-    for (int i = 0; i < size; i++) {
-        int newIndex = (index + i * step) % size;  // находим новый индекс с шагом
-        if (table[newIndex] == nullptr) { // если ячейка пуста, создаем новый узел и вставляем
-            table[newIndex] = new NodeHT(key, value);
-            return;
-        } 
-        else if (table[newIndex]->key == key) { // если ключ уже существует, обновляем значение
-            table[newIndex]->value = value;
-            return;
+    while (current != nullptr) {  // проход по связанному списку
+        if (current->key == key) {  // если ключ уже существует
+            current->value = value;  // обновление значения
+            return;  // выход из функции
         }
+        current = current->next;  // переход к следующему узлу
     }
-    cout << "Хеш-таблица заполнена, невозможно добавить элемент." << endl;
+
+    NodeHT* newNode = new NodeHT(key, value);  // создание нового узла
+    newNode->next = table[index];  // новый узел указывает на текущий узел по индексу
+    table[index] = newNode;  // новый узел становится текущим узлом по индексу
+    count++;  // увеличение счетчика элементов
+
+    // объяснение решения коллизий:
+    // в случае коллизии (двух ключей с одинаковым хеш-значением)
+    // новый узел добавляется в начало связанного списка по этому индексу
 }
 
-// Сложность: O(n) (в худшем случае)
+// Сложность: O(1) (в худшем (если возникают коллизии) - O(n) (n - количество элементов в связанном списке))
 string HashTable::get(const string& key) {
-    int index = hashFunction(key);  // вычисляем первый хеш
-    int step = hashFunction2(key);  // вычисляем шаг для двойного хеширования
+    int index = hash_function(key);  // вычисление индекса для поиска
+    NodeHT* current = table[index];  // получение текущего узла по индексу
 
-    // цикл пытается найти нужный элемент по ключу
-    for (int i = 0; i < size; i++) {
-        int newIndex = (index + i * step) % size;  // находим новый индекс с шагом
-        if (table[newIndex] != nullptr && table[newIndex]->key == key) { // если ключ найден, возвращаем его значение
-            return table[newIndex]->value;
+    while (current != nullptr) {  // проход по связанному списку
+        if (current->key == key) {  // если ключ найден
+            return current->value;  // возврат значения
         }
+        current = current->next;  // переход к следующему узлу
     }
-    return "Элемент не найден";  // если элемент не найден
+
+    return "Ключ не найден!";  // если ключ не найден, возврат сообщения
 }
 
-// Сложность O(n) (в худшем случае: если удаляемый элемент находится в последней возможной ячейке)
+// Сложность: O(1) (в худшем (если возникают коллизии) - O(n) (n - количество элементов в связанном списке))
 void HashTable::remove(const string& key) {
-    int index = hashFunction(key);  // вычисляем первый хеш
-    int step = hashFunction2(key);  // вычисляем шаг для двойного хеширования
+    int index = hash_function(key);  // вычисление индекса для удаления
+    NodeHT* current = table[index];  // получение текущего узла по индексу
+    NodeHT* prev = nullptr;  // указатель на предыдущий узел
 
-    // цикл ищет элемент для удаления
-    for (int i = 0; i < size; i++) {
-        int newIndex = (index + i * step) % size;  // находим новый индекс с шагом
-        if (table[newIndex] != nullptr && table[newIndex]->key == key) { // если ключ найден, удаляем элемент
-            delete table[newIndex];  // освобождаем память
-            table[newIndex] = nullptr;  // отмечаем ячейку как пустую
-            return;
+    while (current != nullptr) {  // проход по связанному списку
+        if (current->key == key) {  // если ключ найден
+            if (prev == nullptr) {  // если это первый узел в списке
+                table[index] = current->next;  // следующий узел становится текущим
+            } else {
+                prev->next = current->next;  // предыдущий узел указывает на следующий узел
+            }
+            delete current;  // удаление текущего узла
+            count--;  // уменьшение счетчика элементов
+            return;  // выход из функции
         }
+        prev = current;  // переход к следующему узлу
+        current = current->next;
     }
-    cout << "Элемент не найден" << endl;  // если элемент не найден
 }
 
 // Сложность: O(n)
 void HashTable::display() {
-    for (int i = 0; i < size; i++) {
-        if (table[i] != nullptr) {
-            cout << "[" << i << "] " << table[i]->key << ": " << table[i]->value << endl;
-        } 
-        else {
-            cout << "[" << i << "] Пусто" << endl;
+    for (int i = 0; i < size; i++) {  // проход по всем индексам таблицы
+        cout << "[" << i << "]: ";
+        NodeHT* current = table[i];  // получение текущего узла по индексу
+        while (current != nullptr) {  // проход по связанному списку
+            cout << "(" << current->key << ", " << current->value << ") ";
+            current = current->next;  // переход к следующему узлу
         }
+        cout << endl;
     }
 }

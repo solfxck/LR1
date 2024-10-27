@@ -1,0 +1,1 @@
+g++ main.cpp Array.cpp Queue.cpp Stack.cpp List.cpp DubleList.cpp HashTable.cpp AVL.cpp -o main
