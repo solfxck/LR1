@@ -1,86 +1,81 @@
 package main
 
 import (
-    "fmt"
-    "hash/fnv"
+	"fmt"
 )
 
-// HashTable представляет хеш-таблицу
 type HashTable struct {
-    table []*NodeHT
-    size  int
+	table []*NodeHT
+	size  int
+	count int
 }
 
-// NewHashTable создает новую хеш-таблицу
-func NewHashTable(size int) *HashTable {
-    return &HashTable{table: make([]*NodeHT, size), size: size}
+func NewHashTable(initialSize int) *HashTable {
+	return &HashTable{table: make([]*NodeHT, initialSize), size: initialSize, count: 0}
 }
 
-// hashFunction вычисляет хеш для ключа
 func (ht *HashTable) hashFunction(key string) int {
-    h := fnv.New32a()
-    h.Write([]byte(key))
-    return int(h.Sum32()) % ht.size
+	hash := 0
+	for _, c := range key {
+		hash += int(c)
+	}
+	return hash % ht.size
 }
 
-// hashFunction2 вычисляет вторичный хеш для двойного хеширования
-func (ht *HashTable) hashFunction2(key string) int {
-    h := fnv.New32a()
-    h.Write([]byte(key))
-    return 7 - int(h.Sum32())%7
-}
-
-// Insert добавляет элемент в хеш-таблицу
 func (ht *HashTable) Insert(key, value string) {
-    index := ht.hashFunction(key)
-    step := ht.hashFunction2(key)
-    for i := 0; i < ht.size; i++ {
-        newIndex := (index + i*step) % ht.size
-        if ht.table[newIndex] == nil {
-            ht.table[newIndex] = &NodeHT{key: key, value: value}
-            return
-        } else if ht.table[newIndex].key == key {
-            ht.table[newIndex].value = value
-            return
-        }
-    }
-    fmt.Println("Хеш-таблица заполнена, невозможно добавить элемент.")
+	index := ht.hashFunction(key)
+	current := ht.table[index]
+	for current != nil {
+		if current.key == key {
+			current.value = value
+			return
+		}
+		current = current.next
+	}
+	node := &NodeHT{key: key, value: value, next: ht.table[index]}
+	ht.table[index] = node
+	ht.count++
 }
 
-// Get возвращает значение по ключу
 func (ht *HashTable) Get(key string) string {
-    index := ht.hashFunction(key)
-    step := ht.hashFunction2(key)
-    for i := 0; i < ht.size; i++ {
-        newIndex := (index + i*step) % ht.size
-        if ht.table[newIndex] != nil && ht.table[newIndex].key == key {
-            return ht.table[newIndex].value
-        }
-    }
-    return "Элемент не найден"
+	index := ht.hashFunction(key)
+	current := ht.table[index]
+	for current != nil {
+		if current.key == key {
+			return current.value
+		}
+		current = current.next
+	}
+	return "Ключ не найден!"
 }
 
-// Remove удаляет элемент по ключу
 func (ht *HashTable) Remove(key string) {
-    index := ht.hashFunction(key)
-    step := ht.hashFunction2(key)
-    for i := 0; i < ht.size; i++ {
-        newIndex := (index + i*step) % ht.size
-        if ht.table[newIndex] != nil && ht.table[newIndex].key == key {
-            ht.table[newIndex] = nil
-            return
-        }
-    }
-    fmt.Println("Элемент не найден")
+	index := ht.hashFunction(key)
+	current := ht.table[index]
+	var prev *NodeHT
+	for current != nil {
+		if current.key == key {
+			if prev == nil {
+				ht.table[index] = current.next
+			} else {
+				prev.next = current.next
+			}
+			ht.count--
+			return
+		}
+		prev = current
+		current = current.next
+	}
 }
 
-// Display выводит элементы хеш-таблицы
 func (ht *HashTable) Display() {
-    for i := 0; i < ht.size; i++ {
-        if ht.table[i] != nil {
-            fmt.Printf("[%d] %s: %s\n", i, ht.table[i].key, ht.table[i].value)
-        } else {
-            fmt.Printf("[%d] Пусто\n", i)
-        }
-    }
+	for i := 0; i < ht.size; i++ {
+		fmt.Printf("[%d]: ", i)
+		current := ht.table[i]
+		for current != nil {
+			fmt.Printf("(%s, %s) ", current.key, current.value)
+			current = current.next
+		}
+		fmt.Println()
+	}
 }

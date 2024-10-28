@@ -2,113 +2,120 @@ package main
 
 import "fmt"
 
-// DubleList представляет двусвязный список
 type DubleList struct {
-    head *Node
-    tail *Node
+	head *Node
+	tail *Node
+	size int
 }
 
-// PushHead добавляет элемент в начало списка
 func (dl *DubleList) PushHead(value string) {
-    node := &Node{data: value, next: dl.head, prev: nil}
-    if dl.head != nil {
-        dl.head.prev = node
-    }
-    dl.head = node
-    if dl.tail == nil {
-        dl.tail = node
-    }
+	node := &Node{data: value}
+	if dl.head == nil {
+		dl.head = node
+		dl.tail = node
+	} else {
+		node.next = dl.head
+		dl.head.prev = node
+		dl.head = node
+	}
+	dl.size++
 }
 
-// PushTail добавляет элемент в конец списка
 func (dl *DubleList) PushTail(value string) {
-    node := &Node{data: value, next: nil, prev: dl.tail}
-    if dl.tail != nil {
-        dl.tail.next = node
-    }
-    dl.tail = node
-    if dl.head == nil {
-        dl.head = node
-    }
+	node := &Node{data: value}
+	if dl.tail == nil {
+		dl.head = node
+		dl.tail = node
+	} else {
+		node.prev = dl.tail
+		dl.tail.next = node
+		dl.tail = node
+	}
+	dl.size++
 }
 
-// PopHead удаляет элемент из начала списка
 func (dl *DubleList) PopHead() {
-    if dl.head == nil {
-        fmt.Println("Список пуст!")
-        return
-    }
-    dl.head = dl.head.next
-    if dl.head != nil {
-        dl.head.prev = nil
-    } else {
-        dl.tail = nil
-    }
+	if dl.head == nil {
+		fmt.Println("Список пуст!")
+		return
+	}
+	temp := dl.head
+	dl.head = dl.head.next
+	if dl.head != nil {
+		dl.head.prev = nil
+	} else {
+		dl.tail = nil
+	}
+	temp.next = nil
+	dl.size--
 }
 
-// PopTail удаляет элемент из конца списка
 func (dl *DubleList) PopTail() {
-    if dl.tail == nil {
-        fmt.Println("Список пуст!")
-        return
-    }
-    dl.tail = dl.tail.prev
-    if dl.tail != nil {
-        dl.tail.next = nil
-    } else {
-        dl.head = nil
-    }
+	if dl.head == nil {
+		fmt.Println("Список пуст!")
+		return
+	}
+	if dl.head == dl.tail {
+		dl.head = nil
+		dl.tail = nil
+	} else {
+		temp := dl.tail
+		dl.tail = dl.tail.prev
+		dl.tail.next = nil
+		temp.prev = nil
+	}
+	dl.size--
 }
 
-// PopValue удаляет элемент по значению
 func (dl *DubleList) PopValue(value string) bool {
-    if dl.head == nil {
-        fmt.Println("Список пуст!")
-        return false
-    }
-    current := dl.head
-    for current != nil && current.data != value {
-        current = current.next
-    }
-    if current == nil {
-        fmt.Println("Элемент не найден!")
-        return false
-    }
-    if current.prev != nil {
-        current.prev.next = current.next
-    } else {
-        dl.head = current.next
-    }
-    if current.next != nil {
-        current.next.prev = current.prev
-    } else {
-        dl.tail = current.prev
-    }
-    return true
+	if dl.head == nil {
+		fmt.Println("Список пуст!")
+		return false
+	}
+	current := dl.head
+	for current != nil && current.data != value {
+		current = current.next
+	}
+	if current == nil {
+		fmt.Println("Элемент не найден!")
+		return false
+	}
+	if current.prev != nil {
+		current.prev.next = current.next
+	} else {
+		dl.head = current.next
+	}
+	if current.next != nil {
+		current.next.prev = current.prev
+	} else {
+		dl.tail = current.prev
+	}
+	current.next = nil
+	current.prev = nil
+	dl.size--
+	return true
 }
 
-// Search ищет элемент по значению
 func (dl *DubleList) Search(value string) bool {
-    current := dl.head
-    for current != nil {
-        if current.data == value {
-            return true
-        }
-        current = current.next
-    }
-    return false
+	current := dl.head
+	for current != nil {
+		if current.data == value {
+			return true
+		}
+		current = current.next
+	}
+	return false
 }
 
-// Display выводит элементы списка
 func (dl *DubleList) Display() {
-    if dl.head == nil {
-        fmt.Println("Список пуст!")
-        return
-    }
-    current := dl.head
-    for current != nil {
-        fmt.Print(current.data, " ")
-        current = current.next
-    }
-    fmt.Println()
+	if dl.head == nil {
+		fmt.Println("Список пуст!")
+		return
+	}
+	current := dl.head
+	for current != nil {
+		fmt.Print(current.data, " ")
+		current = current.next
+	}
+	fmt.Println()
 }
