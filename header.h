@@ -3,16 +3,23 @@
 
 using namespace std;
 
-// структура Node представляет узел в двусвязном списке
+// определение структуры Node (двусвязный список)
 struct Node {
-    string data; // данные, хранящиеся в узле
-    Node* next; // указатель на следующий узел в списке
-    Node* prev; // указатель на предыдущий узел в списке
+    string data;
+    Node* next;
+    Node* prev;
 
-    // конструктор для создания нового узла
-    // принимает значение, указатель на следующий узел и указатель на предыдущий узел
     Node(const string& value, Node* nextNode = nullptr, Node* prevNode = nullptr)
         : data(value), next(nextNode), prev(prevNode) {}
+};
+
+// определение структуры Node1 (спиок, очередь, стек)
+struct Node1 {
+    string data; // данные узла
+    Node1* next; // указатель на следующий узел
+
+    // конструктор для узла
+    Node1(const string& value) : data(value), next(nullptr) {}
 };
 
 // структура NodeHT представляет узел в хеш-таблице
@@ -40,8 +47,8 @@ struct NodeAVL {
 
 // объявление структуры Queue
 struct Queue {
-    Node* head;
-    Node* tail;
+    Node1* head;
+    Node1* tail;
     Queue() {
         head = nullptr;
         tail = nullptr;
@@ -53,7 +60,7 @@ struct Queue {
 
 // объявление структуры Stack
 struct Stack {
-    Node* top;
+    Node1* top;
     Stack() {
         top = nullptr;
     }
@@ -64,13 +71,13 @@ struct Stack {
 
 // объявление структуры Array
 struct Array {
-    Node* head;
+    string* data;
     int size;
     int capacity;
 
-    Array(int initialCapacity = 10);
-    void push(int index, string value);
+    Array();
     void pushEnd(string value);
+    void push(int index, string value);
     string get(int index);
     void pop(int index);
     void replace(int index, string value);
@@ -80,8 +87,8 @@ struct Array {
 
 // объявление структуры List
 struct List {
-    Node* head;
-    Node* tail;
+    Node1* head;
+    Node1* tail;
     int size;
 
     List();

@@ -12,7 +12,7 @@ List::List() {
 
 // Сложность: O(1)
 void List::pushHead(string value) {
-    Node* newNode = new Node(value);  // создаем новый узел с переданным значением
+    Node1* newNode = new Node1(value);  // создаем новый узел с переданным значением
 
     // если список пуст, новый элемент становится первым(head) и последним(tail)
     if (head == nullptr) {
@@ -28,7 +28,7 @@ void List::pushHead(string value) {
 
 // Сложность: O(1)
 void List::pushTail(string value) {
-    Node* newNode = new Node(value);  // создаем новый узел с переданным значением
+    Node1* newNode = new Node1(value);  // создаем новый узел с переданным значением
 
     // если список пуст, новый элемент становится первым(head) и последним(tail)
     if (tail == nullptr) {
@@ -50,7 +50,7 @@ void List::popHead() {
         return;
     }
 
-    Node* toDelete = head; // сохраняем указатель на элемент, который будет удален
+    Node1* toDelete = head; // сохраняем указатель на элемент, который будет удален
     head = head->next; // перемещаем head на следующий элемент
 
     // если список опустел, tail нужно также установить в nullptr
@@ -74,7 +74,7 @@ void List::popTail() {
     }
     else {
         // если в списке несколько элементов, находим предпоследний элемент
-        Node* current = head;
+        Node1* current = head;
         while (current->next != tail) {
             current = current->next;
         }
@@ -102,7 +102,7 @@ bool List::popValue(string value) {
         return true;
     }
 
-    Node* current = head;
+    Node1* current = head;
     // проходим по списку, пока не найдем элемент с требуемым значением
     while (current->next != nullptr && current->next->data != value) {
         current = current->next;
@@ -114,7 +114,7 @@ bool List::popValue(string value) {
         return false;
     }
 
-    Node* toDelete = current->next;  // сохраняем указатель на элемент для удаления
+    Node1* toDelete = current->next;  // сохраняем указатель на элемент для удаления
     current->next = toDelete->next;  // изменяем указатель текущего элемента 
 
     // если удаляем последний элемент, обновляем tail
@@ -127,7 +127,7 @@ bool List::popValue(string value) {
 // функция ищет элемент с заданным значением в списке
 // Сложность: O(n)
 bool List::search(string value) {
-    Node* current = head;
+    Node1* current = head;
     // проходим по списку, пока не найдем искомый элемент
     while (current != nullptr) {
         if (current->data == value) return true;  // найден нужный элемент
@@ -143,7 +143,7 @@ void List::display() {
         return;
     }
 
-    Node* current = head;
+    Node1* current = head;
     // проходим по списку, выводя каждый элемент
     while (current != nullptr) {
         cout << current->data << " ";

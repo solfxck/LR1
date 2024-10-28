@@ -3,7 +3,7 @@
 // Сложность: O(1)
 void Queue::push(string value) {
     // создаем новый узел с заданным значением и указателем на следующий элемент, равным nullptr
-    Node* node = new Node{ value, nullptr };
+    Node1* node = new Node1(value);
     
     // проверяем, пуста ли очередь
     if (head == nullptr) {
@@ -25,7 +25,7 @@ void Queue::pop() {
         cout << "Очередь пуста!" << endl;
     } 
     else {
-        Node* temp = head; // временно сохраняем указатель на текущую голову (первый элемент)
+        Node1* temp = head; // временно сохраняем указатель на текущую голову (первый элемент)
         head = head->next; // перемещаем указатель головы на следующий элемент в очереди
         cout << "Удаленный элемент: " << temp->data << endl;
         delete temp; // освобождаем память, занятую удаляемым элементом
@@ -44,7 +44,7 @@ void Queue::display() {
         cout << "Очередь пуста!" << endl;
     }
     else {
-        Node* current = head; // для итерации по элементам очереди
+        Node1* current = head; // для итерации по элементам очереди
 
         // пока не достигнут конец очереди
         while (current != nullptr) {

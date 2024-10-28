@@ -44,7 +44,7 @@ void loadArrayFromFile(Array& array, const string& filename) {
     if (inputFile.is_open()) {
         string value;
         while (getline(inputFile, value)) {
-            array.pushEnd(value); // добавляем строку в конец массива
+            array.pushEnd(value);
         }
         inputFile.close();
     }
@@ -104,7 +104,7 @@ void loadAVLFromFile(AVL& avl, const string& filename) {
 void saveQueueToFile(Queue& queue, const string& filename) {
     ofstream outputFile(filename); // открываем файл для записи
     if (outputFile.is_open()) { // проверяем, удалось ли открыть файл
-        Node* current = queue.head;
+        Node1* current = queue.head;
         while (current != nullptr) { // проходим по очереди
             outputFile << current->data << endl; // записываем данные в файл
             current = current->next;
@@ -117,7 +117,7 @@ void saveQueueToFile(Queue& queue, const string& filename) {
 void saveStackToFile(Stack& stack, const string& filename) {
     ofstream outputFile(filename);
     if (outputFile.is_open()) {
-        Node* current = stack.top;
+        Node1* current = stack.top;
         while (current != nullptr) { // проходим по стеку
             outputFile << current->data << endl; // записываем данные в файл
             current = current->next;
@@ -130,10 +130,10 @@ void saveStackToFile(Stack& stack, const string& filename) {
 void saveArrayToFile(Array& array, const string& filename) {
     ofstream outputFile(filename);
     if (outputFile.is_open()) {
-        for (int i = 0; i < array.length(); i++) { // проходим по массиву
-            outputFile << array.get(i) << endl; // записываем данные в файл
+        for (int i = 0; i < array.length(); i++) {
+            outputFile << array.get(i) << endl;
         }
-        outputFile.close(); // закрываем файл
+        outputFile.close();
     }
 }
 
@@ -141,7 +141,7 @@ void saveArrayToFile(Array& array, const string& filename) {
 void saveListToFile(List& list, const string& filename) {
     ofstream outputFile(filename);
     if (outputFile.is_open()) {
-        Node* current = list.head;
+        Node1* current = list.head;
         while (current != nullptr) { // проходим по списку
             outputFile << current->data << endl; // записываем данные в файл
             current = current->next;
